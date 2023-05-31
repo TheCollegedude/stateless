@@ -146,9 +146,8 @@ namespace Stateless
 
                 await InternalFireOneAsync(trigger, args).ConfigureAwait(false);
 
-                while (_eventQueue.Count != 0)
+                while (_eventQueue.TryDequeue(out var queuedEvent))
                 {
-                    var queuedEvent = _eventQueue.Dequeue();
                     await InternalFireOneAsync(queuedEvent.Trigger, queuedEvent.Args).ConfigureAwait(false);
                 }
             }

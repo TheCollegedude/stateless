@@ -1,5 +1,6 @@
 ﻿using Stateless.Reflection;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,7 +40,7 @@ namespace Stateless
             public object[] Args { get; set; }
         }
 
-        private readonly Queue<QueuedTrigger> _eventQueue = new Queue<QueuedTrigger>();
+        private readonly ConcurrentQueue<QueuedTrigger> _eventQueue = new ConcurrentQueue<QueuedTrigger>();
         private bool _firing;
 
         /// <summary>
@@ -370,9 +371,8 @@ namespace Stateless
                 _firing = true;
 
                 // Empty queue for triggers
-                while (_eventQueue.Any())
+                while (_eventQueue.TryDequeue(out var queuedEvent))
                 {
-                    var queuedEvent = _eventQueue.Dequeue();
                     InternalFireOne(queuedEvent.Trigger, queuedEvent.Args);
                 }
             }
