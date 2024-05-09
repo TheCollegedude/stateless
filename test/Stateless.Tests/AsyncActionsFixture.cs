@@ -1,14 +1,14 @@
 #if TASKS
 
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Stateless.Tests
 {
-
     public class AsyncActionsFixture
     {
         [Fact]
@@ -471,6 +471,144 @@ namespace Stateless.Tests
             sm.FireAsync(Trigger.X);
 
             Assert.Equal(State.D, sm.State);
+        }
+
+        [Fact]
+        public void OnEntryFromAsync_WhenTriggeredSynchronously_Throws()
+        {
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A).Permit(Trigger.X, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryFromAsync(Trigger.X, async () => await Task.Run(() => { }));
+
+            Assert.Throws<InvalidOperationException>(() => sm.Fire(Trigger.X));
+        }
+
+        [Fact]
+        public async Task OnEntryFromAsync_WhenTriggered_InvokesAction()
+        {
+            bool wasInvoked = false;
+
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A).Permit(Trigger.X, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryFromAsync(Trigger.X, async () => await Task.Run(() => { wasInvoked = true; }));
+
+            await sm.FireAsync(Trigger.X);
+
+            Assert.True(wasInvoked);
+        }
+
+        [Fact]
+        public void OnEntryFromAsync_WhenEnteringByAnotherTriggerSynchronously_DoesNotThrow()
+        {
+            bool wasInvoked = false;
+
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A)
+                .Permit(Trigger.X, State.B)
+                .Permit(Trigger.Y, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryFromAsync(Trigger.X, async () => await Task.Run(() => { wasInvoked = true; }));
+
+            sm.Fire(Trigger.Y);
+
+            Assert.False(wasInvoked);
+        }
+
+        [Fact]
+        public async Task OnEntryFromAsync_WhenEnteringByAnotherTrigger_InvokesAction()
+        {
+            bool wasInvoked = false;
+
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A)
+                .Permit(Trigger.X, State.B)
+                .Permit(Trigger.Y, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryFromAsync(Trigger.X, async () => await Task.Run(() => { wasInvoked = true; }));
+
+            await sm.FireAsync(Trigger.Y);
+
+            Assert.False(wasInvoked);
+        }
+
+        [Fact]
+        public async Task FireAsyncTriggerWithParametersArray()
+        {
+            const string expectedParam = "42-Stateless-True-123.45-Y";
+            string actualParam = null;
+
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A)
+                .Permit(Trigger.X, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryAsync(t =>
+                {
+                    actualParam = string.Join("-", t.Parameters.Select(x => string.Format(CultureInfo.InvariantCulture, "{0}", x)));
+                    return Task.CompletedTask;
+                });
+
+            await sm.FireAsync(Trigger.X, 42, "Stateless", true, 123.45, Trigger.Y);
+
+            Assert.Equal(expectedParam, actualParam);
+        }
+
+        [Fact]
+        public async Task FireAsync_TriggerWithMoreThanThreeParameters()
+        {
+            const string expectedParam = "42-Stateless-True-123.45-Y";
+            string actualParam = null;
+
+            var sm = new StateMachine<State, Trigger>(State.A);
+
+            sm.Configure(State.A)
+                .Permit(Trigger.X, State.B);
+
+            sm.Configure(State.B)
+                .OnEntryAsync(t =>
+                {
+                    actualParam = string.Join("-", t.Parameters.Select(x => string.Format(CultureInfo.InvariantCulture, "{0}", x)));
+                    return Task.CompletedTask;
+                });
+
+            var parameterizedX = sm.SetTriggerParameters(Trigger.X, typeof(int), typeof(string), typeof(bool), typeof(double), typeof(Trigger));
+
+            await sm.FireAsync(parameterizedX, 42, "Stateless", true, 123.45, Trigger.Y);
+
+            Assert.Equal(expectedParam, actualParam);
+        }
+
+        [Fact]
+        public async Task WhenInSubstate_TriggerSuperStateTwiceToSameSubstate_DoesNotReenterSubstate_Async()
+        {
+            var sm = new StateMachine<State, Trigger>(State.A);
+            var eCount = 0;
+
+            sm.Configure(State.B)
+                .OnEntry(() => { eCount++; })
+                .SubstateOf(State.C);
+
+            sm.Configure(State.A)
+                .SubstateOf(State.C);
+
+            sm.Configure(State.C)
+                .Permit(Trigger.X, State.B);
+
+            await sm.FireAsync(Trigger.X);
+            await sm.FireAsync(Trigger.X);
+
+            Assert.Equal(1, eCount);
         }
     }
 }

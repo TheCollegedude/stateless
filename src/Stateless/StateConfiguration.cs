@@ -1141,7 +1141,7 @@ namespace Stateless
             /// Substates inherit the allowed transitions of their superstate.
             /// When entering directly into a substate from outside of the superstate,
             /// entry actions for the superstate are executed.
-            /// Likewise when leaving from the substate to outside the supserstate,
+            /// Likewise when leaving from the substate to outside the superstate,
             /// exit actions for the superstate will execute.
             /// </remarks>
             /// <param name="superstate">The superstate.</param>
@@ -1183,8 +1183,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Optional description for the function to calculate the state </param>
             /// <param name="possibleDestinationStates">Optional array of possible destination states (used by output formatters) </param>
             /// <returns>The receiver.</returns>
@@ -1211,8 +1213,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Optional description of the function to calculate the state </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <returns>The receiver.</returns>
@@ -1243,8 +1247,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Optional description of the function to calculate the state </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <returns>The receiver.</returns>
@@ -1275,8 +1281,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Optional description of the function to calculate the state </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <returns>The receiver.</returns>
@@ -1309,8 +1317,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1327,8 +1337,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state 
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Description of the function to calculate the state </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1353,8 +1365,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guards">Functions and their descriptions that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
@@ -1369,8 +1383,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state 
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="destinationStateSelectorDescription">Description of the function to calculate the state </param>
             /// <param name="guards">Functions and their descriptions that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1394,8 +1410,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1421,8 +1439,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>            
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <returns>The receiver.</returns>
             /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
             public StateConfiguration PermitDynamicIf<TArg0>(TriggerWithParameters<TArg0> trigger, Func<TArg0, TState> destinationStateSelector)
@@ -1435,8 +1455,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <param name="guards">Functions and their descriptions that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1461,8 +1483,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1490,8 +1514,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <param name="guards">Functions and their descriptions that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1518,8 +1544,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <returns>The receiver.</returns>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1549,8 +1577,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <returns>The receiver.</returns>
             /// <param name="guards">Functions ant their descriptions that must return true in order for the
@@ -1579,8 +1609,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Parameterized Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1606,8 +1638,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <param name="guards">Functions and their descriptions that must return true in order for the
             /// trigger to be accepted.</param>
@@ -1632,8 +1666,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1661,8 +1697,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guards">Functions that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
@@ -1689,8 +1727,10 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guard">Function that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="guardDescription">Guard description</param>
@@ -1698,7 +1738,7 @@ namespace Stateless
             /// <returns>The receiver.</returns>
             /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
             /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-            /// <typeparam name="TArg2"></typeparam>
+            /// <typeparam name="TArg2">Type of the third trigger argument.</typeparam>
             public StateConfiguration PermitDynamicIf<TArg0, TArg1, TArg2>(TriggerWithParameters<TArg0, TArg1, TArg2> trigger, Func<TArg0, TArg1, TArg2, TState> destinationStateSelector, Func<TArg0, TArg1, TArg2, bool> guard, string guardDescription = null, Reflection.DynamicStateInfos possibleDestinationStates = null)
             {
                 if (trigger == null) throw new ArgumentNullException(nameof(trigger));
@@ -1720,15 +1760,17 @@ namespace Stateless
             /// dynamically by the supplied function.
             /// </summary>
             /// <param name="trigger">The accepted trigger.</param>
-            /// <param name="destinationStateSelector">Function to calculate the state
-            /// that the trigger will cause a transition to.</param>
+            /// <param name="destinationStateSelector">
+            /// Function to calculate the destination state; if the source and destination states are the same, it will be reentered and 
+            /// any exit or entry logic will be invoked.
+            /// </param>
             /// <param name="guards">Functions that must return true in order for the
             /// trigger to be accepted.</param>
             /// <param name="possibleDestinationStates">Optional list of possible target states.</param>
             /// <returns>The receiver.</returns>
             /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
             /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-            /// <typeparam name="TArg2"></typeparam>
+            /// <typeparam name="TArg2">Type of the third trigger argument.</typeparam>
             public StateConfiguration PermitDynamicIf<TArg0, TArg1, TArg2>(TriggerWithParameters<TArg0, TArg1, TArg2> trigger, Func<TArg0, TArg1, TArg2, TState> destinationStateSelector, Tuple<Func<TArg0, TArg1, TArg2, bool>, string>[] guards, Reflection.DynamicStateInfos possibleDestinationStates = null)
             {
                 if (trigger == null) throw new ArgumentNullException(nameof(trigger));
@@ -1795,7 +1837,7 @@ namespace Stateless
             /// <returns>A stateConfiguration object</returns>
             public StateConfiguration InitialTransition(TState targetState)
             {
-                if (_representation.HasInitialTransition) throw new InvalidOperationException($"This state has already been configured with an inital transition ({_representation.InitialTransitionTarget}).");
+                if (_representation.HasInitialTransition) throw new InvalidOperationException($"This state has already been configured with an initial transition ({_representation.InitialTransitionTarget}).");
                 if (targetState.Equals(State)) throw new ArgumentException("Setting the current state as the target destination state is not allowed.", nameof(targetState));
 
                 _representation.SetInitialTransition(targetState);

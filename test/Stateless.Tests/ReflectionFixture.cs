@@ -587,7 +587,7 @@ namespace Stateless.Tests
             InvocationInfo method = methods.First();
 
             if (state == State.A)
-                Assert.Equal(prefix + body + ((timing == InvocationInfo.Timing.Asynchronous) ? "Async" : ""), method.Description);
+                Assert.Equal(prefix + body + (timing == InvocationInfo.Timing.Asynchronous ? "Async" : ""), method.Description);
             else if (state == State.B)
                 Assert.Equal(UserDescription + "B-" + body, method.Description);
             else if (state == State.C)
@@ -612,15 +612,15 @@ namespace Stateless.Tests
                 {
                     if (state == State.A)
                     {
-                        matches = (method.Description == (prefix + body
-                            + ((timing == InvocationInfo.Timing.Asynchronous) ? "Async" : "" + suffix)));
+                        matches = method.Description == prefix + body
+                                                               + (timing == InvocationInfo.Timing.Asynchronous ? "Async" : "" + suffix);
                     }
                     else if (state == State.B)
-                        matches = (UserDescription + "B-" + body + suffix == method.Description);
+                        matches = UserDescription + "B-" + body + suffix == method.Description;
                     else if (state == State.C)
-                        matches = (InvocationInfo.DefaultFunctionDescription == method.Description);
+                        matches = InvocationInfo.DefaultFunctionDescription == method.Description;
                     else if (state == State.D)
-                        matches = (UserDescription + "D-" + body + suffix == method.Description);
+                        matches = UserDescription + "D-" + body + suffix == method.Description;
                     //
                     if (matches)
                     {
@@ -891,6 +891,14 @@ namespace Stateless.Tests
             StateConfiguration InternalPermit(TTrigger trigger, TState destinationState, string guardDescription)
             StateConfiguration InternalPermitDynamic(TTrigger trigger, Func<object[], TState> destinationStateSelector, string guardDescription)
              */
+        }
+
+        [Fact]
+        public void InvocationInfo_Description_Property_When_Method_Name_Is_Null_Returns_String_Literal_Null()
+        {
+            var invocationInfo = new InvocationInfo(null, null, InvocationInfo.Timing.Synchronous);
+
+            Assert.Equal("<null>", invocationInfo.Description);
         }
     }
 }
