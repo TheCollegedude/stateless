@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 5.17.0 - 2024.12.30
+### Changed
+ - Use `PackageLicenseExpression` in csproj file [#583], [#584]
+### Added
+ - Added mermaid graph support [#585]
+ - Allow PermitDynamic destination state to be calculated with an async function (Task) [#595]
+ - Updated readme to clarify re-entry behaviour of dynamic transitions [#604]
+ - Added .NET 9.0 to build targets [#610]
+### Fixed
+ - Unexpected graph labels for internal transitions [#587]
+ - Labels not escaped in `UmlDotGraphStyle` [#597]
+
+## 5.16.0 - 2024.05.24
+### Changed
+ - Permit state reentry from dynamic transitions [#565]
+   - This is a change in behavior from v5.15.0 (see [#544]); this version restores the previous behavior for `PermitDynamic` that allows reentry;
+     if reentry is not the desired behavior, consider using a guard condition with `PermitDynamicIf`.
+ - Remove getDestination, and use Destination property instead (internal refactor) [#575]
+### Added
+ - Add overloads to `FireAsync` to support parameterized trigger arguments [#570]
+ - Add overloads to `CanFire` to support parameterized trigger arguments [#574]
+### Fixed
+ - Prevent `NullReferenceException` in the `InvocationInfo` class [#566]
+
 ## 5.15.0 - 2023.12.29
 ### Changed
  - Updated net6.0 build target to net8.0 [#551]
@@ -210,6 +234,19 @@ Version 5.10.0 is now listed as the newest, since it has the highest version num
 ### Removed
 ### Fixed
 
+[#610]: https://github.com/dotnet-state-machine/stateless/pull/610
+[#604]: https://github.com/dotnet-state-machine/stateless/issues/604
+[#597]: https://github.com/dotnet-state-machine/stateless/pull/597
+[#595]: https://github.com/dotnet-state-machine/stateless/pull/595
+[#587]: https://github.com/dotnet-state-machine/stateless/pull/589
+[#585]: https://github.com/dotnet-state-machine/stateless/issues/585
+[#584]: https://github.com/dotnet-state-machine/stateless/pull/584
+[#583]: https://github.com/dotnet-state-machine/stateless/pull/583
+[#575]: https://github.com/dotnet-state-machine/stateless/pull/575
+[#574]: https://github.com/dotnet-state-machine/stateless/pull/574
+[#570]: https://github.com/dotnet-state-machine/stateless/pull/570
+[#566]: https://github.com/dotnet-state-machine/stateless/pull/566
+[#565]: https://github.com/dotnet-state-machine/stateless/issues/565
 [#551]: https://github.com/dotnet-state-machine/stateless/pull/551
 [#557]: https://github.com/dotnet-state-machine/stateless/issues/557
 [#553]: https://github.com/dotnet-state-machine/stateless/issues/553

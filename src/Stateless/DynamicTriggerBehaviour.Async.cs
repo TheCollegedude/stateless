@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Stateless
 {
     public partial class StateMachine<TState, TTrigger>
     {
-        internal class DynamicTriggerBehaviour : TriggerBehaviour
+        internal class DynamicTriggerBehaviourAsync : TriggerBehaviour
         {
-            readonly Func<object[], TState> _destination;
+            readonly Func<object[], Task<TState>> _destination;
             internal Reflection.DynamicTransitionInfo TransitionInfo { get; private set; }
 
-            public DynamicTriggerBehaviour(TTrigger trigger, Func<object[], TState> destination, 
+            public DynamicTriggerBehaviourAsync(TTrigger trigger, Func<object[], Task<TState>> destination,
                 TransitionGuard transitionGuard, Reflection.DynamicTransitionInfo info)
                 : base(trigger, transitionGuard)
             {
@@ -17,9 +18,9 @@ namespace Stateless
                 TransitionInfo = info ?? throw new ArgumentNullException(nameof(info));
             }
 
-            public void GetDestinationState(TState source, object[] args, out TState destination)
+            public async Task<TState> GetDestinationState(TState source, object[] args)
             {
-                destination = _destination(args);
+               return await _destination(args);
             }
         }
     }
