@@ -138,10 +138,24 @@ namespace Stateless
             /// <typeparam name="TArg0"></typeparam>
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="internalAction">The action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
-            public StateConfiguration InternalTransition<TArg0>(TriggerWithParameters<TArg0> trigger, Action<TArg0, Transition> internalAction)
+            public StateConfiguration InternalTransition<TArg0>(TriggerWithParameters<TArg0> trigger, Action<TArg0, Transition> internalAction, string guardDescription = null)
             {
-                return InternalTransitionIf(trigger, t => true, internalAction);
+                return InternalTransitionIf(trigger, t => true, internalAction, guardDescription);
+            }
+
+            /// <summary>
+            /// Add an internal transition to the state machine. An internal action does not cause the Exit and Entry actions to be triggered, and does not change the state of the state machine
+            /// </summary>
+            /// <typeparam name="TArg0"></typeparam>
+            /// <param name="trigger">The accepted trigger</param>
+            /// <param name="internalAction">The action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
+            /// <returns></returns>
+            public StateConfiguration InternalTransition<TArg0>(TriggerWithParameters<TArg0> trigger, Action<TArg0> internalAction, string guardDescription = null)
+            {
+                return InternalTransitionIf(trigger, t => true, internalAction, guardDescription);
             }
 
             /// <summary>

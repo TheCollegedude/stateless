@@ -95,11 +95,12 @@ namespace Stateless
             /// <typeparam name="TArg0"></typeparam>
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
             [Obsolete("Use InternalTransitionAsync(TTrigger, Func<Transition, Task>) instead.")]
-            public StateConfiguration InternalTransitionAsync<TArg0>(TTrigger trigger, Func<Transition, Task> internalAction)
+            public StateConfiguration InternalTransitionAsync<TArg0>(TTrigger trigger, Func<Transition, Task> internalAction, string guardDescription = null)
             {
-                return InternalTransitionAsyncIf(trigger, () => true, internalAction);
+                return InternalTransitionAsyncIf(trigger, () => true, internalAction, guardDescription);
             }
 
             /// <summary>
@@ -108,8 +109,9 @@ namespace Stateless
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="guard">Function that must return true in order for the\r\n            /// trigger to be accepted.</param>
             /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
-            public StateConfiguration InternalTransitionAsyncIf(TTrigger trigger, Func<bool> guard, Func<Task> internalAction)
+            public StateConfiguration InternalTransitionAsyncIf(TTrigger trigger, Func<bool> guard, Func<Task> internalAction, string guardDescription = null)
             {
                 if (internalAction == null) throw new ArgumentNullException(nameof(internalAction));
 
@@ -123,8 +125,9 @@ namespace Stateless
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="guard">Function that must return true in order for the trigger to be accepted.</param>
             /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
-            public StateConfiguration InternalTransitionAsyncIf(TTrigger trigger, Func<bool> guard, Func<Transition, Task> internalAction)
+            public StateConfiguration InternalTransitionAsyncIf(TTrigger trigger, Func<bool> guard, Func<Transition, Task> internalAction, string guardDescription = null)
             {
                 if (internalAction == null) throw new ArgumentNullException(nameof(internalAction));
 
@@ -146,6 +149,24 @@ namespace Stateless
                 if (internalAction == null) throw new ArgumentNullException(nameof(internalAction));
 
                 _representation.AddTriggerBehaviour(new InternalTriggerBehaviour.Async(trigger.Trigger, TransitionGuard.ToPackedGuard(guard), (t, args) => internalAction(ParameterConversion.Unpack<TArg0>(args, 0), t)));
+                return this;
+            }
+
+            /// <summary>
+            /// Add an internal transition to the state machine. An internal action does not cause the Exit and Entry actions to be triggered, and does not change the state of the state machine
+            /// </summary>
+            /// <typeparam name="TArg0"></typeparam>
+            /// <param name="trigger">The accepted trigger</param>
+            /// <param name="guard">Function that must return true in order for the trigger to be accepted.</param>
+            /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
+            /// <returns></returns>
+            public StateConfiguration InternalTransitionAsyncIf<TArg0>(TriggerWithParameters<TArg0> trigger, Func<TArg0, bool> guard, Func<TArg0, Task> internalAction, string guardDescription = null)
+            {
+                if (trigger == null) throw new ArgumentNullException(nameof(trigger));
+                if (internalAction == null) throw new ArgumentNullException(nameof(internalAction));
+
+                _representation.AddTriggerBehaviour(new InternalTriggerBehaviour.Async(trigger.Trigger, TransitionGuard.ToPackedGuard(guard), (t, args) => internalAction(ParameterConversion.Unpack<TArg0>(args, 0)), guardDescription));
                 return this;
             }
 
@@ -196,20 +217,22 @@ namespace Stateless
             /// </summary>
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
-            public StateConfiguration InternalTransitionAsync(TTrigger trigger, Func<Task> internalAction)
+            public StateConfiguration InternalTransitionAsync(TTrigger trigger, Func<Task> internalAction, string guardDescription = null)
             {
-                return InternalTransitionAsyncIf(trigger, () => true, internalAction);
+                return InternalTransitionAsyncIf(trigger, () => true, internalAction, guardDescription);
             }
             /// <summary>
             /// Add an internal transition to the state machine. An internal action does not cause the Exit and Entry actions to be triggered, and does not change the state of the state machine
             /// </summary>
             /// <param name="trigger">The accepted trigger</param>
             /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
             /// <returns></returns>
-            public StateConfiguration InternalTransitionAsync(TTrigger trigger, Func<Transition, Task> internalAction)
+            public StateConfiguration InternalTransitionAsync(TTrigger trigger, Func<Transition, Task> internalAction, string guardDescription = null)
             {
-                return InternalTransitionAsyncIf(trigger, () => true, internalAction);
+                return InternalTransitionAsyncIf(trigger, () => true, internalAction, guardDescription);
             }
             /// <summary>
             /// Add an internal transition to the state machine. An internal action does not cause the Exit and Entry actions to be triggered, and does not change the state of the state machine
@@ -221,6 +244,18 @@ namespace Stateless
             public StateConfiguration InternalTransitionAsync<TArg0>(TriggerWithParameters<TArg0> trigger, Func<TArg0, Transition, Task> internalAction)
             {
                 return InternalTransitionAsyncIf(trigger, t => true, internalAction);
+            }
+            /// <summary>
+            /// Add an internal transition to the state machine. An internal action does not cause the Exit and Entry actions to be triggered, and does not change the state of the state machine
+            /// </summary>
+            /// <typeparam name="TArg0"></typeparam>
+            /// <param name="trigger">The accepted trigger</param>
+            /// <param name="internalAction">The asynchronous action performed by the internal transition</param>
+            /// <param name="guardDescription">A description of the guard condition</param>
+            /// <returns></returns>
+            public StateConfiguration InternalTransitionAsync<TArg0>(TriggerWithParameters<TArg0> trigger, Func<TArg0, Task> internalAction, string guardDescription = null)
+            {
+                return InternalTransitionAsyncIf(trigger, t => true, internalAction, guardDescription);
             }
 
             /// <summary>
@@ -723,7 +758,7 @@ namespace Stateless
             /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
             public StateConfiguration PermitDynamicIfAsync<TArg0>(TriggerWithParameters<TArg0> trigger, Func<TArg0, Task<TState>> destinationStateSelector)
             {
-                return PermitDynamicIfAsync<TArg0>(trigger, destinationStateSelector, null, new Tuple<Func<bool>, string>[0]);
+                return PermitDynamicIfAsync<TArg0>(trigger, destinationStateSelector, null, Array.Empty<Tuple<Func<bool>, string>>());
             }
 
             /// <summary>
