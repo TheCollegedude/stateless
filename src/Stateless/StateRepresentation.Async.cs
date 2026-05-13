@@ -1,5 +1,3 @@
-#if TASKS
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,7 +161,6 @@ namespace Stateless
                 return syncResult;
             }
 
-
             public async Task<List<TTrigger>> GetPermittedTriggersAsync(params object[] args)
             {
                 var resultList = new List<TTrigger>();
@@ -189,13 +186,19 @@ namespace Stateless
 
             public async Task<TriggerBehaviourResult> TryFindHandlerAsync(TTrigger trigger, object[] args)
             {
-                var localHandlerFound = await TryFindLocalHandlerAsync(trigger, args);
+                TriggerBehaviourResult superstateHandler = null;
 
-                var superstateHandlerFound = Superstate != null
-                    ? await Superstate.TryFindHandlerAsync(trigger, args)
-                    : null;
+                var localHandler = await TryFindLocalHandlerAsync(trigger, args);
+                bool localHandlerFound = localHandler != null && !localHandler.UnmetGuardConditions.Any();
+                
+                if (!localHandlerFound)
+                {
+                    superstateHandler = Superstate != null
+                        ? await Superstate.TryFindHandlerAsync(trigger, args)
+                        : null;
+                }
 
-                return superstateHandlerFound ?? localHandlerFound;
+                return superstateHandler ?? localHandler;
             }
 
             private async Task<TriggerBehaviourResult> TryFindLocalHandlerAsync(TTrigger trigger, object[] args)
@@ -227,12 +230,9 @@ namespace Stateless
 
                     handleResultAsync = TryFindLocalHandlerResult(trigger, asyncTriggerBehaviourResult) ?? TryFindLocalHandlerResultWithUnmetGuardConditions(asyncTriggerBehaviourResult);
                 }
-               
 
                 return handleResultSync ?? handleResultAsync;
             }
         }
     }
 }
-
-#endif

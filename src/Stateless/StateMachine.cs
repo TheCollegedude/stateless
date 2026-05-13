@@ -164,6 +164,8 @@ namespace Stateless
 
             var behaviours = _stateConfiguration.SelectMany(kvp => kvp.Value.TriggerBehaviours.SelectMany(b => b.Value.OfType<TransitioningTriggerBehaviour>().Select(tb => tb.Destination))).ToList();
             behaviours.AddRange(_stateConfiguration.SelectMany(kvp => kvp.Value.TriggerBehaviours.SelectMany(b => b.Value.OfType<ReentryTriggerBehaviour>().Select(tb => tb.Destination))).ToList());
+            behaviours.AddRange(_stateConfiguration.SelectMany(kvp => kvp.Value.TriggerBehavioursAsync.SelectMany(b => b.Value.OfType<TransitioningTriggerBehaviourAsync>().Select(tb => tb.Destination))).ToList());
+            behaviours.AddRange(_stateConfiguration.SelectMany(kvp => kvp.Value.TriggerBehavioursAsync.SelectMany(b => b.Value.OfType<ReentryTriggerBehaviourAsync>().Select(tb => tb.Destination))).ToList());
 
             var reachable = behaviours
                 .Distinct()
@@ -832,6 +834,40 @@ namespace Stateless
         {
             if (onTransitionAction == null) throw new ArgumentNullException(nameof(onTransitionAction));
             _onTransitionCompletedEvent.Register(onTransitionAction);
+        }
+
+        /// <summary>
+        /// Unregisters a previously registered callback to prevent further events from
+        /// being raised when the state machine transitions from one state into another.
+        /// </summary>
+        /// <param name="onTransitionAction"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void OnTransitionedUnregister(Action<Transition> onTransitionAction)
+        {
+            if (onTransitionAction == null) throw new ArgumentNullException(nameof(onTransitionAction));
+            _onTransitionedEvent.Unregister(onTransitionAction);
+        }
+
+        /// <summary>
+        /// Unregisters a previously registered callback to prevent further events from
+        /// being raised when the state machine has completed its state transition.
+        /// </summary>
+        /// <param name="onTransitionAction"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void OnTransitionCompletedUnregister(Action<Transition> onTransitionAction)
+        {
+            if (onTransitionAction == null) throw new ArgumentNullException(nameof(onTransitionAction));
+            _onTransitionCompletedEvent.Unregister(onTransitionAction);
+        }
+
+        /// <summary>
+        /// Unregisters all callbacks currently registered with the state machine for
+        /// both "transitioned" and "transition completed" events.
+        /// </summary>
+        public void UnregisterAllCallbacks()
+        {
+            _onTransitionedEvent.UnregisterAll();
+            _onTransitionCompletedEvent.UnregisterAll();
         }
     }
 }
